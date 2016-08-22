@@ -5,7 +5,6 @@ import com.three.Config;
 import com.three.ExpressiveConfig;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,8 +26,11 @@ public class TestAspect {
     @Autowired
     private CompactDisc cd;
 
+/*    @Autowired
+    private TrackCounter counter;*/
+
     @Autowired
-    private TrackCounter counter;
+    private TrackCounterXml counter;
 
     @Autowired
     private Performance performance;
@@ -36,6 +38,7 @@ public class TestAspect {
     @Test
     public void test(){
         performance.perform();
+        ((Encoreable)performance).performEncore();
     }
 
     @Test
