@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.four"/>
+    <aop:aspectj-autoproxy/>
+    <!--<bean class="com.four.Audience"/>-->
+    <bean id="audienceXml" class="com.four.AudienceXml"/>
+
+    <aop:config>
+        <aop:aspect ref="audienceXml">
+            <aop:pointcut id="performance" expression="execution(* com.four.Performance.perform(..))"/>
+            <!--表演之前-->
+            <aop:before method="silenceCellPhones" pointcut-ref="performance"/>
+            <aop:before method="takeSeats" pointcut-ref="performance"/>
+            <!--表演之后-->
+            <aop:after-returning method="applause" pointcut-ref="performance"/>
+            <!--表演失败之后-->
+            <aop:after-throwing method="demandRefund" pointcut-ref="performance"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
