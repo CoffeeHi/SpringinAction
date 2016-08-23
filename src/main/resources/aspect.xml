@@ -78,4 +78,8 @@
             </list>
         </property>
     </bean>
+    <!--为CriticAspect装配CriticismEngineImpl-->
+ <!--   <bean id="critic" class="com.four.CriticAspect" factory-method="aspectOf">
+        <property name="criticismEngine" ref="criticismEngine"/>
+    </bean>-->
 </beans>
