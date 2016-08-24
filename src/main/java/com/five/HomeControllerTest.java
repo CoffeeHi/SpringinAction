@@ -46,6 +46,24 @@ public class HomeControllerTest {
                 .andExpect(model().attribute("spittleList", hasItems(expectedSpittles.toArray()))); //断言期望的值
     }
 
+    @Test //用来测试分页Spittle列表的新方法
+    public void shouldShowPageSpittles() throws Exception {
+
+        List<Spittle> expectedSpittles = createSpittleList(50);
+
+        SpittleRepository mockRepository = mock(SpittleRepository.class); //Mock Repository
+
+        when(mockRepository.findSpittles(238900, 50)).thenReturn(expectedSpittles);
+
+        SpittleController controller = new SpittleController(mockRepository);
+
+        //Mock SpringMVC
+        MockMvc mockMvc = standaloneSetup(controller).setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp")).build();
+        //对"/spittles"发起GET请求
+        mockMvc.perform(get("/spittles?max=238900&count=50")).andExpect(view().name("spittles")).andExpect(model().attributeExists("spittleList"))
+                .andExpect(model().attribute("spittleList", hasItems(expectedSpittles.toArray()))); //断言期望的值
+    }
+
     private List<Spittle> createSpittleList(int count) {
         List<Spittle> spittles = new ArrayList<Spittle>();
         for (int i=0; i < count; i++){

@@ -1,5 +1,6 @@
 package com.five;
 
+import lombok.Data;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -9,8 +10,9 @@ import java.util.Date;
  * Created by 陈祥 on 2016/8/23.
  * Spittle类 包含消息内容、时间戳和位置信息
  */
+@Data
 public class Spittle {
-    private final Long id;
+    private Long id;
     private final String message;
     private final Date time;
     private Double latitude;
@@ -28,7 +30,7 @@ public class Spittle {
         this.longtitude = longtitude;
     }
 
-    public Long getId() {
+/*    public Long getId() {
         return id;
     }
 
@@ -46,7 +48,7 @@ public class Spittle {
 
     public Double getLongtitude() {
         return longtitude;
-    }
+    }*/
 
     @Override
     public boolean equals(Object that) {

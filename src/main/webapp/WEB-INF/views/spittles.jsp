@@ -1,4 +1,6 @@
-<%--
+<%@ page import="com.five.Spittle" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
   Date: 2016/8/24 0024
@@ -13,7 +15,13 @@
 </head>
 <body>
 <c:forEach items="${spittleList}" var="spittle">
-    <li id="spittle_<c:out value="spittle.id"/>">
+<% List<Spittle> a = (ArrayList)request.getAttribute("spittleList");
+    for (Spittle aa : a){
+        System.out.println(aa.getMessage());
+    }
+     %>
+    <li id="spittle_<c:out value="${spittle.id}"/>">
+        <% System.out.println(1); %>
         <div class="spittleMessage">
             <c:out value="${spittle.message}"/>
         </div>
