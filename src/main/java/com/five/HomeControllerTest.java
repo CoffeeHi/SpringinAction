@@ -9,8 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
@@ -53,15 +52,56 @@ public class HomeControllerTest {
 
         SpittleRepository mockRepository = mock(SpittleRepository.class); //Mock Repository
 
-        when(mockRepository.findSpittles(238900, 50)).thenReturn(expectedSpittles);
+        when(mockRepository.findSpittles(123, 50)).thenReturn(expectedSpittles);
 
         SpittleController controller = new SpittleController(mockRepository);
 
         //Mock SpringMVC
         MockMvc mockMvc = standaloneSetup(controller).setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp")).build();
         //对"/spittles"发起GET请求
-        mockMvc.perform(get("/spittles?max=238900&count=50")).andExpect(view().name("spittles")).andExpect(model().attributeExists("spittleList"))
+        mockMvc.perform(get("/spittles?count=50")).andExpect(view().name("spittles")).andExpect(model().attributeExists("spittleList"))
                 .andExpect(model().attribute("spittleList", hasItems(expectedSpittles.toArray()))); //断言期望的值
+    }
+
+    @Test //测试对某个Spittle的请求，其中ID要在路径变量中指定
+    public void testSpittle() throws Exception {
+
+        Spittle expectedSpittle = new Spittle("Hello", new Date());
+
+        SpittleRepository mockRepository = mock(SpittleRepository.class); //Mock Repository
+
+        when(mockRepository.findOne(12345)).thenReturn(expectedSpittle);
+
+        SpittleController controller = new SpittleController(mockRepository);
+
+        //Mock SpringMVC
+        MockMvc mockMvc = standaloneSetup(controller).build();
+
+        //通过路径请求资源
+        mockMvc.perform(get("/spittles/12345")).andExpect(view().name("spittle")).andExpect(model().attributeExists("spittle"))
+                .andExpect(model().attribute("spittle", expectedSpittle)); //断言期望的值
+    }
+
+    @Test //测试处理表单的控制器
+    public void shouldProcessRegistration() throws Exception {
+        SpitterRepository mockRepository = mock(SpitterRepository.class);
+
+        Spitter unsaved = new Spitter("jbauer" , "24hours" , "Jack" , "Bauer");
+
+        Spitter saved = new Spitter(24L, "jbauer" , "24hours" , "Jack" , "Bauer");
+
+        when(mockRepository.save(unsaved)).thenReturn(saved);
+        when(mockRepository.findByUsername("jbauer")).thenReturn(saved);
+
+        SpitterController controller = new SpitterController(mockRepository);
+
+        MockMvc mockMvc = standaloneSetup(controller).build();
+
+        mockMvc.perform(post("/spitter/register").
+                param("firstName", "Jack").param("lastName", "Bauer")
+                .param("username", "jbauer").param("password", "24hours")).andExpect(redirectedUrl("/spitter/jbauer"));
+
+        verify(mockRepository, atLeastOnce()).save(unsaved); //校验保存情况
     }
 
     private List<Spittle> createSpittleList(int count) {

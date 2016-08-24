@@ -12,16 +12,74 @@
     <!--<bean class="com.four.Audience"/>-->
     <bean id="audienceXml" class="com.four.AudienceXml"/>
 
+    <!--通过注解引入新功能-->
+    <!--<bean class="com.four.EncoreableIntroducer"/>-->
+
     <aop:config>
         <aop:aspect ref="audienceXml">
             <aop:pointcut id="performance" expression="execution(* com.four.Performance.perform(..))"/>
-            <!--表演之前-->
+
+            <aop:around method="watchPerformance" pointcut-ref="performance"/>
+
+           <!-- &lt;!&ndash;表演之前&ndash;&gt;
             <aop:before method="silenceCellPhones" pointcut-ref="performance"/>
             <aop:before method="takeSeats" pointcut-ref="performance"/>
-            <!--表演之后-->
+            &lt;!&ndash;表演之后&ndash;&gt;
             <aop:after-returning method="applause" pointcut-ref="performance"/>
-            <!--表演失败之后-->
-            <aop:after-throwing method="demandRefund" pointcut-ref="performance"/>
+            &lt;!&ndash;表演失败之后&ndash;&gt;
+            <aop:after-throwing method="demandRefund" pointcut-ref="performance"/>-->
         </aop:aspect>
     </aop:config>
+
+
+    <!--在XML中将TrackCounter配置为参数化的切面-->
+    <bean id="trackCounter" class="com.four.TrackCounterXml"/>
+    <bean id="cd" class="com.bean.BlankDisc" >
+        <property name="title" value="Sgt. Pepper's Lonely Hearts Club Band"/>
+        <property name="artist" value="The Beatles"/>
+        <property name="tracks">
+            <list>
+                <value>Sgt. Pepper's Lonely Hearts Club Band</value>
+                <value>With a Little Help from My Friends</value>
+                <value>Lucy in the Sky with Diamonds</value>
+                <value>Getting Better</value>
+                <value>Fixing a Hole</value>
+                <value>Just Beat it</value>
+            </list>
+        </property>
+    </bean>
+    <aop:config>
+        <aop:aspect ref="trackCounter">
+            <aop:pointcut id="trackPlayed" expression="execution(* com.inte.CompactDisc.playTrack(int)) and args(trackNumber)"/>
+            <aop:before method="countTrack" pointcut-ref="trackPlayed"/>
+        </aop:aspect>
+
+        <!--通过切面引入新功能-->
+        <aop:aspect>
+            <!--使用全限定类名来显式指定Encoreable的实现-->
+           <!-- <aop:declare-parents types-matching="com.four.Performance+" implement-interface="com.four.Encoreable"
+                                 default-impl="com.four.DefaultEncoreable"/>-->
+
+            <aop:declare-parents types-matching="com.four.Performance+" implement-interface="com.four.Encoreable"
+                                 delegate-ref="encoreableDelegate"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="encoreableDelegate" class="com.four.DefaultEncoreable"/>
+
+
+    <!--要注入到CriticAspect中的CriticismEngine实现-->
+    <bean id="criticismEngine" class="com.four.CriticismEngineImpl">
+        <property name="criticismPool">
+            <list>
+                <value>Worst performance ever!</value>
+                <value>I laughed, I cried, then I realized I was at the wrong show.</value>
+                <value>A must see show!</value>
+            </list>
+        </property>
+    </bean>
+    <!--为CriticAspect装配CriticismEngineImpl-->
+ <!--   <bean id="critic" class="com.four.CriticAspect" factory-method="aspectOf">
+        <property name="criticismEngine" ref="criticismEngine"/>
+    </bean>-->
 </beans>

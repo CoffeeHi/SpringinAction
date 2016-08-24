@@ -15,6 +15,12 @@ public class SpittleRepositoryImpl implements SpittleRepository {
         return createSpittleList(count);
     }
 
+    public Object findOne(long spittleId) {
+        Spittle spittle = new Spittle("halo", new Date());
+        spittle.setId(spittleId);
+        return spittle;
+    }
+
     private List<Spittle> createSpittleList(int count) {
         List<Spittle> spittles = new ArrayList<Spittle>();
         for (int i=0; i < count; i++){
