@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Created by 陈祥 on 2016/8/23.
  */
 @Controller //声明为一个控制器
-@RequestMapping({"/" , "/homepage"})
+@RequestMapping({"/"})
 public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET) //处理对"/"的GET请求

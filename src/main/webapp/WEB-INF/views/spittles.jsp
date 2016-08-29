@@ -21,7 +21,6 @@
     }
      %>
     <li id="spittle_<c:out value="${spittle.id}"/>">
-        <% System.out.println(1); %>
         <div class="spittleMessage">
             <c:out value="${spittle.message}"/>
         </div>
