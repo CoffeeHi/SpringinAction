@@ -12,6 +12,10 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
 
 import java.io.IOException;
 
@@ -29,20 +33,7 @@ public class RootConfig {
         return messageSource;
     }
 
-    @Bean //配置Tiles视图解析器
-    public TilesConfigurer tilesConfigurer(){
-        TilesConfigurer tiles = new TilesConfigurer();
-        tiles.setDefinitions(new String[]{
-                "/WEB-INF/layout/tiles.xml"
-        });
-        tiles.setCheckRefresh(true);
-        return tiles;
-    }
 
-    @Bean
-    public ViewResolver viewResolver(){
-        return new TilesViewResolver();
-    }
 
     @Bean //使用Servlet3.0解析multipart请求
     public MultipartResolver multipartResolver() {

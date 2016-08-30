@@ -101,5 +101,31 @@
             <version>2.2.2</version>
         </dependency>
 
+        <!-- Thymeleaf模板支持 -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring4</artifactId>
+            <version>2.1.4.RELEASE</version>
+        </dependency>
+
     </dependencies>
+
+     <!--<build>
+         <finalName>spring-mvc</finalName>
+         <plugins>
+             <plugin>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <configuration>
+                     <source>1.7</source>
+                     <target>1.7</target>
+                 </configuration>
+             </plugin>
+             &lt;!&ndash;tomcat插件，意味着你不需要安装tomcat&ndash;&gt;
+             <plugin>
+                 <groupId>org.apache.tomcat.maven</groupId>
+                 <artifactId>tomcat7-maven-plugin</artifactId>
+                 <version>2.2</version>
+             </plugin>
+         </plugins>
+     </build>-->
 </project>
