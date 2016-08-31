@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.File;
@@ -36,28 +37,30 @@ public class SpitterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String processRegistration(@RequestPart("profilePicture") MultipartFile profilePicture, @Valid Spitter spitter, Errors errors) throws IOException { //校验Spitter输入
+    public String processRegistration(@RequestPart("profilePicture") MultipartFile profilePicture, @Valid Spitter spitter, Errors errors, RedirectAttributes model) throws IOException { //校验Spitter输入
 
         if (errors.hasErrors()){ //如果校验出现错误，则重新返回表单
 //            return "registerForm";
         }
 
         //保存图片
-        File file = new File("/uploads/" + profilePicture.getOriginalFilename());
-    /*    if (!file.exists()) {
-            file.createNewFile();
-        }*/
-        profilePicture.transferTo(file);
+//        profilePicture.transferTo(new File("/uploads/" + profilePicture.getOriginalFilename()));
 
         spitterRepository.save(spitter); //保存Spitter
 
-        return "redirect:/spitter/" + spitter.getUsername(); //重定向到基本信息页
+        model.addAttribute("username", spitter.getUsername());
+        model.addAttribute("spitterId", spitter.getUsername());
+        model.addFlashAttribute("spitter", spitter); //使用flash属性传递对象
+        return "redirect:/spitter/{username}"; //通过URL模板进行重定向
+
+//        return "redirect:/spitter/" + spitter.getUsername(); //重定向到基本信息页
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public String showSpitterProfile(@PathVariable String username, Model model){
-        Spitter spitter = spitterRepository.findByUsername(username);
-        model.addAttribute(spitter);
+        if (!model.containsAttribute("spitter")){
+            model.addAttribute(spitterRepository.findByUsername(username));
+        }
         return "profile";
     }
 }

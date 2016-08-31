@@ -27,4 +27,8 @@
     <definition name="spittle" extends="base">
         <put-attribute name="body" value="/WEB-INF/views/spittle.jsp"/>
     </definition>
+
+    <definition name="xvideos" extends="base">
+        <put-attribute name="body" value="/WEB-INF/views/xvideos.jsp"/>
+    </definition>
 </tiles-definitions>

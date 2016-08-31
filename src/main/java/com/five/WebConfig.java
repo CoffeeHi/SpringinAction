@@ -41,7 +41,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         configurer.enable();
     }
 
-  /*  @Bean //配置Tiles视图解析器
+    @Bean //配置Tiles视图解析器
     public TilesConfigurer tilesConfigurer(){
         TilesConfigurer tiles = new TilesConfigurer();
         tiles.setDefinitions(new String[]{
@@ -53,10 +53,10 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     @Bean
     public ViewResolver viewResolver(){
         return new TilesViewResolver();
-    }*/
+    }
 
     //使用java代码的方式，配置spring对Thymeleaf的支持
-    @Bean //Thymeleaf视图解析器
+   /* @Bean //Thymeleaf视图解析器
     public ViewResolver viewResolver(SpringTemplateEngine templateEngine){
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(templateEngine);
@@ -75,7 +75,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
         return templateResolver;
-    }
+    }*/
 
     @Bean //使用Servlet3.0解析multipart请求
     public MultipartResolver multipartResolver(){
