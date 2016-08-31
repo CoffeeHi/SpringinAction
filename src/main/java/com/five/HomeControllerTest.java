@@ -24,7 +24,6 @@ public class HomeControllerTest {
         HomeController controller = new HomeController();
         MockMvc mockMvc = standaloneSetup(controller).build(); //搭建MockMvc
         mockMvc.perform(get("/")).andExpect(view().name("home")); //对"/"执行get请求，预期得到home视图
-        mockMvc.perform(get("/homepage")).andExpect(view().name("home")); //对"/"执行get请求，预期得到home视图
     }
 
     @Test //测试SpittleController处理针对"/spittles"的GET请求

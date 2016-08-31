@@ -7,8 +7,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Administrator on 2016/8/24 0024.
@@ -32,11 +36,18 @@ public class SpitterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String processRegistration(@Valid Spitter spitter, Errors errors){ //校验Spitter输入
+    public String processRegistration(@RequestPart("profilePicture") MultipartFile profilePicture, @Valid Spitter spitter, Errors errors) throws IOException { //校验Spitter输入
 
         if (errors.hasErrors()){ //如果校验出现错误，则重新返回表单
-            return "registerForm";
+//            return "registerForm";
         }
+
+        //保存图片
+        File file = new File("/uploads/" + profilePicture.getOriginalFilename());
+    /*    if (!file.exists()) {
+            file.createNewFile();
+        }*/
+        profilePicture.transferTo(file);
 
         spitterRepository.save(spitter); //保存Spitter
 

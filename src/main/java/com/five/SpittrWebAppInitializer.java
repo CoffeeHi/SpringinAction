@@ -2,8 +2,11 @@ package com.five;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import java.io.File;
 
 /**
  * Created by 陈祥 on 2016/8/23.
@@ -28,4 +31,13 @@ public class SpittrWebAppInitializer extends AbstractAnnotationConfigDispatcherS
         return new String[]{"/"};
     }
 
+    /**使用Servlet3.0解析multipart请求
+     * 限制文件的大小不超过2MB，整个请求不超过4MB，且所有文件都要写到磁盘中
+     */
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        registration.setMultipartConfig(
+                new MultipartConfigElement("/tmp", 2097152, 4194304, 0)
+        );
+    }
 }
