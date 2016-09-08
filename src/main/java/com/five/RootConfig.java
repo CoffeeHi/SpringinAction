@@ -1,5 +1,6 @@
 package com.five;
 
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,10 +34,13 @@ public class RootConfig {
         return messageSource;
     }
 
-
-
     @Bean //使用Servlet3.0解析multipart请求
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
+    }
+
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactoryBean(){
+        return new SqlSessionFactoryBean();
     }
 }
